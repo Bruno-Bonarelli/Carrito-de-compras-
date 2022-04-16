@@ -44,7 +44,7 @@ class Carrito {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>
-                <img src="${producto.imagen}" width=100>
+                <img src="${producto.imagen}" width=30>
             </td>
             <td>${producto.titulo}</td>
             <td>$${producto.precio}</td>
