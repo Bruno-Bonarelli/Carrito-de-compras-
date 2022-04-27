@@ -12,15 +12,21 @@ function cargarEventos() {
     document.addEventListener('DOMContentLoaded', compra.leerLocalStorageCompra());
 
     //Eliminar productos del carrito
-    carrito.addEventListener('click', (e) => { compra.eliminarProducto(e) });
+    carrito.addEventListener('click', (e) => {
+        compra.eliminarProducto(e)
+    });
 
     compra.calcularTotal();
 
     //cuando se selecciona procesar Compra
     procesarCompraBtn.addEventListener('click', procesarCompra);
 
-    carrito.addEventListener('change', (e) => { compra.obtenerEvento(e) });
-    carrito.addEventListener('keyup', (e) => { compra.obtenerEvento(e) });
+    carrito.addEventListener('change', (e) => {
+        compra.obtenerEvento(e)
+    });
+    carrito.addEventListener('keyup', (e) => {
+        compra.obtenerEvento(e)
+    });
 
 
 }
@@ -37,8 +43,7 @@ function procesarCompra() {
         }).then(function () {
             window.location = "index.html";
         })
-    }
-    else if (cliente.value === '' || correo.value === '') {
+    } else if (cliente.value === '' || correo.value === '') {
         Swal.fire({
             type: 'error',
             title: 'Oops...',
@@ -46,15 +51,59 @@ function procesarCompra() {
             showConfirmButton: false,
             timer: 2000
         })
-    }
-    else {
-        
+    } else {
+
         //aqui se coloca el user id generado en el emailJS
         (function () {
-            emailjs.init("user_CEozz2F39lJJOLF5mJiDA");
+            emailjs.init("D0RY4vXbCf4lcebI0");
         })();
 
-        var myform = $("form#procesar-pago");
+        const btn = document.getElementById('procesar-compra');
+
+        const cargandoGif = document.querySelector('#cargando');
+        cargandoGif.style.display = 'block';
+
+        const enviado = document.createElement('img');
+        enviado.src = 'img/mail.gif';
+        enviado.style.display = 'block';
+        enviado.width = '150';
+
+        document.getElementById('procesar-pago')
+            .addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                btn.value = 'Sending...';
+
+                const serviceID = 'default_service';
+                const templateID = 'template_kqhdeon';
+
+                emailjs.sendForm(serviceID, templateID, this)
+                    .then(() => {
+                        cargandoGif.style.display = 'none';
+                        document.querySelector('#loaders').appendChild(enviado);
+
+                        Swal.fire({
+                            type: 'success',
+                            text: 'Compra realizada, le enviamos al mail los detalles',
+                            showConfirmButton: false,
+                            timer: 4000
+                        })
+
+                        setTimeout(() => {
+                            compra.vaciarLocalStorage();
+                            enviado.remove();
+                            window.location = "index.html";
+                        }, 4500);
+    
+
+
+                    }, (err) => {
+                        btn.value = 'Send Email';
+                        alert(JSON.stringify(err));
+                    });
+            });
+
+        /* var myform = $("form#procesar-pago");
 
         myform.submit( (event) => {
             event.preventDefault();
@@ -62,6 +111,12 @@ function procesarCompra() {
             // Change to your service ID, or keep using the default service
             var service_id = "default_service";
             var template_id = "template_3SA9LsqQ";
+
+
+
+
+
+
 
             const cargandoGif = document.querySelector('#cargando');
             cargandoGif.style.display = 'block';
@@ -90,8 +145,7 @@ function procesarCompra() {
 
             return false;
 
-        });
+        }); */
 
     }
 }
-

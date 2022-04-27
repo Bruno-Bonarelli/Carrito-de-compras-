@@ -6,7 +6,7 @@ class Carrito {
         //Delegado para agregar al carrito
         if(e.target.classList.contains('agregar-carrito')){
             const producto = e.target.parentElement.parentElement;
-            //Enviamos el producto seleccionado para tomar sus datos
+            //Enviar el producto seleccionado para tomar sus datos
             this.leerDatosProducto(producto);
         }
     }
@@ -31,11 +31,11 @@ class Carrito {
         productosLS === infoProducto.id ?
             Swal.fire({
                 type: 'info',
-                title: 'Oops...',
-                text: 'El producto ya está agregado',
+                text: 'El producto ya está agregado, valla a "procesar compra" para modificar la cantidad',
                 showConfirmButton: false,
-                timer: 1000
-            }) : this.insertarCarrito(infoProducto);
+                timer: 3000
+            }) : this.insertarCarrito(infoProducto); console.log ("BOTON FUNCIONA")
+
         
     }
 
@@ -89,7 +89,7 @@ class Carrito {
         productos = this.obtenerProductosLocalStorage();
         //Agregar el producto al carrito
         productos.push(producto);
-        //Agregamos al LS
+        //Agregar al LS
         localStorage.setItem('productos', JSON.stringify(productos));
     }
 
