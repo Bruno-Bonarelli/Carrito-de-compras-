@@ -33,7 +33,7 @@ class Carrito {
             this.insertarCarrito(infoProducto);
             Toastify({
                 text: "✔ Agregado al carrito",
-                duration: 3000,
+                duration: 2000,
                 style: {
                     background: "white",
                     color: "black",
