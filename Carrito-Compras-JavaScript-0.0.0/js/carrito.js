@@ -46,7 +46,7 @@ class Carrito {
         } else {
             Swal.fire({
                 type: 'info',
-                text: 'El producto ya está agregado, valla a "procesar compra" para modificar la cantidad',
+                text: 'El producto ya está agregado, valla al carrito para procesar la compra',
                 showConfirmButton: false,
                 timer: 3000
             })

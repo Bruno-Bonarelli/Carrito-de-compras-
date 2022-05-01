@@ -40,16 +40,16 @@ function procesarCompra() {
             text: 'No hay productos, selecciona alguno',
             showConfirmButton: false,
             timer: 2000
-        }).then(function () {
+        })/* .then(function () {
             window.location = "index.html";
-        })
+        }) */
     } else if (cliente.value === '' || correo.value === '') {
         Swal.fire({
             type: 'error',
             title: 'Oops...',
             text: 'Ingrese todos los campos requeridos',
             showConfirmButton: false,
-            timer: 2000
+            timer: 3000
         })
     } else {
 
@@ -60,50 +60,51 @@ function procesarCompra() {
 
         const btn = document.getElementById('procesar-compra');
 
-        const cargandoGif = document.querySelector('#cargando');
-        cargandoGif.style.display = 'block';
+        document.getElementById('procesar-pago').addEventListener('submit', function (event) {
+            event.preventDefault();
 
-        const enviado = document.createElement('img');
-        enviado.src = 'img/mail.gif';
-        enviado.style.display = 'block';
-        enviado.width = '150';
+            const serviceID = 'default_service';
+            const templateID = 'template_kqhdeon';
 
-        document.getElementById('procesar-pago')
-            .addEventListener('submit', function (event) {
-                event.preventDefault();
+            const cargandoGif = document.querySelector('#cargando');
+            cargandoGif.style.display = 'block';
 
-                btn.value = 'Sending...';
+            const enviado = document.createElement('img');
+            enviado.src = 'img/mail.gif';
+            enviado.style.display = 'block';
+            enviado.width = '150';
 
-                const serviceID = 'default_service';
-                const templateID = 'template_kqhdeon';
+            emailjs.sendForm(serviceID, templateID, this)
+                .then(() => {
+                    cargandoGif.style.display = 'none';
+                    document.querySelector('#loaders').appendChild(enviado);
 
-                emailjs.sendForm(serviceID, templateID, this)
-                    .then(() => {
-                        cargandoGif.style.display = 'none';
-                        document.querySelector('#loaders').appendChild(enviado);
+                    Swal.fire({
+                        type: 'success',
+                        text: 'Compra realizada, le enviamos al mail los detalles',
+                        showConfirmButton: false,
+                        timer: 4000
+                    })
 
-                        Swal.fire({
-                            type: 'success',
-                            text: 'Compra realizada, le enviamos al mail los detalles',
-                            showConfirmButton: false,
-                            timer: 4000
-                        })
-
-                        setTimeout(() => {
-                            compra.vaciarLocalStorage();
-                            enviado.remove();
-                            window.location = "index.html";
-                        }, 4500);
-    
+                    setTimeout(() => {
+                        compra.vaciarLocalStorage();
+                        enviado.remove();
+                        window.location = "index.html";
+                    }, 4500);
 
 
-                    }, (err) => {
-                        btn.value = 'Send Email';
-                        alert(JSON.stringify(err));
-                    });
-            });
 
-        /* var myform = $("form#procesar-pago");
+                }, (err) => {
+                    btn.value = 'Send Email';
+                    alert(JSON.stringify(err));
+                });
+            return false;
+        });
+    }
+}
+
+
+/* var myform = $("form#procesar-pago");
 
         myform.submit( (event) => {
             event.preventDefault();
@@ -146,6 +147,3 @@ function procesarCompra() {
             return false;
 
         }); */
-
-    }
-}
